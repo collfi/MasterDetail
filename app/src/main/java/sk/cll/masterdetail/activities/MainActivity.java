@@ -1,25 +1,25 @@
-package sk.cll.masterdetail;
+package sk.cll.masterdetail.activities;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import sk.cll.masterdetail.dummy.DummyContent;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.RecyclerView;
+import sk.cll.masterdetail.R;
+import sk.cll.masterdetail.dummy.DummyContent;
+import sk.cll.masterdetail.fragments.ItemDetailFragment;
 
 /**
  * An activity representing a list of Items. This activity
@@ -29,7 +29,7 @@ import java.util.List;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class ItemListActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -40,7 +40,7 @@ public class ItemListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_item_list);
+        setContentView(R.layout.activity_main);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -75,7 +75,7 @@ public class ItemListActivity extends AppCompatActivity {
     public static class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final ItemListActivity mParentActivity;
+        private final MainActivity mParentActivity;
         private final List<DummyContent.DummyItem> mValues;
         private final boolean mTwoPane;
         private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
@@ -100,7 +100,7 @@ public class ItemListActivity extends AppCompatActivity {
             }
         };
 
-        SimpleItemRecyclerViewAdapter(ItemListActivity parent,
+        SimpleItemRecyclerViewAdapter(MainActivity parent,
                                       List<DummyContent.DummyItem> items,
                                       boolean twoPane) {
             mValues = items;
@@ -135,7 +135,7 @@ public class ItemListActivity extends AppCompatActivity {
 
             ViewHolder(View view) {
                 super(view);
-                mIdView = (TextView) view.findViewById(R.id.id_text);
+                mIdView = (TextView) view.findViewById(R.id.tv_name);
                 mContentView = (TextView) view.findViewById(R.id.content);
             }
         }

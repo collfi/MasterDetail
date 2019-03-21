@@ -1,4 +1,4 @@
-package sk.cll.masterdetail;
+package sk.cll.masterdetail.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -10,11 +10,14 @@ import android.widget.TextView;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 import androidx.fragment.app.Fragment;
+import sk.cll.masterdetail.R;
+import sk.cll.masterdetail.activities.ItemDetailActivity;
+import sk.cll.masterdetail.activities.MainActivity;
 import sk.cll.masterdetail.dummy.DummyContent;
 
 /**
  * A fragment representing a single Item detail screen.
- * This fragment is either contained in a {@link ItemListActivity}
+ * This fragment is either contained in a {@link MainActivity}
  * in two-pane mode (on tablets) or a {@link ItemDetailActivity}
  * on handsets.
  */

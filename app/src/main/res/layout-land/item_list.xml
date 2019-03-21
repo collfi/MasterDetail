@@ -10,7 +10,7 @@
               android:divider="?android:attr/dividerHorizontal"
               android:orientation="horizontal"
               android:showDividers="middle"
-              tools:context=".ItemListActivity">
+              tools:context=".activities.MainActivity">
 
     <!--
     This layout is a two-pane layout for the Items
@@ -25,9 +25,12 @@
                                                android:layout_width="@dimen/item_width"
                                                android:layout_height="match_parent"
                                                android:layout_marginLeft="16dp"
+                                               android:clickable="true"
+                                               android:focusable="true"
+                                               android:focusableInTouchMode="true"
                                                android:layout_marginRight="16dp"
-                                               app:layoutManager="LinearLayoutManager"
-                                               tools:context="sk.cll.masterdetail.ItemListActivity"
+                                               app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                                               tools:context="sk.cll.masterdetail.activities.MainActivity"
                                                tools:listitem="@layout/item_list_content"/>
 
     <FrameLayout
