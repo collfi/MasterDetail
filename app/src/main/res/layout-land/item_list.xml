@@ -47,6 +47,8 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:visibility="gone"
+            android:gravity="center"
+            android:layout_margin="@dimen/text_margin"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:text="@string/no_data"
             android:drawableTop="@android:drawable/ic_menu_help"/>

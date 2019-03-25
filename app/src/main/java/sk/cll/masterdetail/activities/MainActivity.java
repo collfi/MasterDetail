@@ -2,6 +2,7 @@ package sk.cll.masterdetail.activities;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,6 +19,8 @@ import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
@@ -41,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
     TextView mEmptyView;
     @BindView(R.id.progress_loading)
     ProgressBar mProgressBar;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
 
     CompositeDisposable mCompositeDisposable;
     private boolean isLoading;
@@ -55,9 +60,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setTitle(getTitle());
+        mToolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        mToolbar.setTitle(getTitle());
+
 
         mPreferences = getPreferences(Context.MODE_PRIVATE);
         mGson = new Gson();
@@ -82,7 +88,10 @@ public class MainActivity extends AppCompatActivity {
             mRecyclerView.getAdapter().notifyDataSetChanged();
         }
 
-        mEmptyView.setOnClickListener(v -> downloadUsers());
+        mEmptyView.setOnClickListener(v -> {
+            mProgressBar.setVisibility(View.VISIBLE);
+            downloadUsers();
+        });
 
         mRecyclerView.addOnScrollListener(new PaginationScrollListener() {
             @Override
@@ -123,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
         mProgressBar.setVisibility(View.GONE);
         mRecyclerView.getAdapter().notifyDataSetChanged();
         mModel.addUsers(users);
-//        mPreferences.edit().putString("users", mGson.toJson(mUsers)).apply();
+        mPreferences.edit().putString("users", mGson.toJson(mUsers)).apply();
         isLoading = false;
     }
 
@@ -140,10 +149,31 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         mCompositeDisposable.clear();
-    }@Override
+    }
+
+    private void removeDetailFragment() {
+        Fragment old = getSupportFragmentManager().findFragmentByTag("detail");
+        if (old != null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .setTransition(FragmentTransaction.TRANSIT_NONE)
+                    .remove(old)
+                    .commit();
+        }
+        int orientation = getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        }
+    }
+
+    @Override
     public boolean onSupportNavigateUp() {
-        //This method is called when the up button is pressed. Just the pop back stack.
-        getSupportFragmentManager().popBackStack();
-        return true;
+        removeDetailFragment();
+        return super.onSupportNavigateUp();
+    }
+
+    @Override
+    public void onBackPressed() {
+        removeDetailFragment();
     }
 }

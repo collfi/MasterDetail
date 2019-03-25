@@ -13,6 +13,8 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
@@ -63,14 +65,18 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> 
         holder.itemView.setTag(data.get(position));
         holder.itemView.setOnClickListener(v -> {
 
+            FragmentManager fm = ((MainActivity) context).getSupportFragmentManager();
+            Fragment old = fm.findFragmentByTag("detail");
+            if (old != null) {
+                fm.beginTransaction().remove(old).commit();
+            }
             ItemDetailFragment fragment = new ItemDetailFragment();
             Bundle bundle = new Bundle();
             bundle.putParcelable("user", data.get(position));
             fragment.setArguments(bundle);
-            ((MainActivity) context).getSupportFragmentManager().beginTransaction()
-                    .addToBackStack("detail")
+            fm.beginTransaction()
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                    .replace(R.id.item_detail_container, fragment)
+                    .replace(R.id.item_detail_container, fragment, "detail")
                     .commit();
         });
     }
