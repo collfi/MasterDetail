@@ -22,6 +22,14 @@ public class ItemDetailFragment extends Fragment {
 
     private Toolbar mToolbar;
 
+    public static ItemDetailFragment newInstance(User arg) {
+        ItemDetailFragment itemDetailFragment = new ItemDetailFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("user", arg);
+        itemDetailFragment.setArguments(bundle);
+        return itemDetailFragment;
+    }
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).

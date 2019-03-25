@@ -174,6 +174,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        removeDetailFragment();
+        if (getSupportFragmentManager().findFragmentByTag("detail") != null) {
+            removeDetailFragment();
+        } else {
+            super.onBackPressed();
+        }
     }
 }

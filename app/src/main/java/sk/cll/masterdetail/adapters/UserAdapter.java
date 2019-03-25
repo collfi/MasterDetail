@@ -1,7 +1,6 @@
 package sk.cll.masterdetail.adapters;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,10 +69,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> 
             if (old != null) {
                 fm.beginTransaction().remove(old).commit();
             }
-            ItemDetailFragment fragment = new ItemDetailFragment();
-            Bundle bundle = new Bundle();
-            bundle.putParcelable("user", data.get(position));
-            fragment.setArguments(bundle);
+            Fragment fragment = ItemDetailFragment.newInstance(data.get(position));
             fm.beginTransaction()
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                     .replace(R.id.item_detail_container, fragment, "detail")

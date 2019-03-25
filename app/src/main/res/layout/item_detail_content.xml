@@ -11,9 +11,9 @@
 
         <ImageView
             android:id="@+id/img_photo_large"
-            android:layout_margin="16dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="16dp"
             android:contentDescription="@string/photo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -43,12 +43,12 @@
             android:id="@+id/tv_gender"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:drawableLeft="@android:drawable/ic_menu_myplaces"
             android:drawableStart="@android:drawable/ic_menu_myplaces"
             android:gravity="center_vertical"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="16dp"
             app:layout_constraintEnd_toStartOf="@+id/tv_region"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_age"/>
@@ -57,14 +57,14 @@
             android:id="@+id/tv_region"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:drawableLeft="@android:drawable/ic_menu_mapmode"
-            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
+            android:drawableLeft="@android:drawable/ic_menu_mapmode"
             android:drawableStart="@android:drawable/ic_menu_mapmode"
             android:gravity="center_vertical"
-            app:layout_constraintStart_toEndOf="@+id/tv_gender"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tv_gender"
             app:layout_constraintTop_toBottomOf="@id/tv_age"/>
 
         <TextView
@@ -72,8 +72,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:drawableLeft="@android:drawable/ic_menu_call"
             android:drawableStart="@android:drawable/ic_menu_call"
             android:gravity="center_vertical"
@@ -85,34 +85,33 @@
             android:id="@+id/tv_email"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
             android:drawableLeft="@android:drawable/ic_menu_send"
             android:drawableStart="@android:drawable/ic_menu_send"
             android:gravity="center_vertical"
-            app:layout_constraintStart_toEndOf="@+id/tv_phone"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tv_phone"
             app:layout_constraintTop_toBottomOf="@+id/tv_region"/>
 
         <TextView
+            android:id="@+id/tv_bio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/tv_bio"
             android:layout_margin="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
             android:layout_marginEnd="16dp"
-            android:paddingStart="16dp"
-            android:paddingLeft="16dp"
-            android:paddingEnd="16dp"
-            android:paddingRight="16dp"
+            android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingStart="16dp"
+            android:text="@string/lorem_ipsum"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_email"
-            android:text="@string/lorem_ipsum"/>
-
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_email"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

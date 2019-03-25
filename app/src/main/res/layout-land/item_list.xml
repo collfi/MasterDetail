@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:baselineAligned="false"
-                android:divider="?android:attr/dividerHorizontal"
-                android:orientation="horizontal"
-                android:showDividers="middle"
-                android:weightSum="3"
-                tools:context=".activities.MainActivity">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_marginLeft="16dp"
+              android:layout_marginRight="16dp"
+              android:baselineAligned="false"
+              android:divider="?android:attr/dividerHorizontal"
+              android:orientation="horizontal"
+              android:showDividers="middle"
+              android:weightSum="3"
+              tools:context=".activities.MainActivity">
 
     <RelativeLayout
         android:layout_width="0dp"
@@ -46,12 +46,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:visibility="gone"
-            android:gravity="center"
             android:layout_margin="@dimen/text_margin"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:drawableTop="@android:drawable/ic_menu_help"
+            android:gravity="center"
             android:text="@string/no_data"
-            android:drawableTop="@android:drawable/ic_menu_help"/>
+            android:visibility="gone"/>
     </RelativeLayout>
 
     <FrameLayout
