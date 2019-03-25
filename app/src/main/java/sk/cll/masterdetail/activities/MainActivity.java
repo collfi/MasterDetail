@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView mRecyclerView;
     @BindView(R.id.tv_empty_view)
     TextView mEmptyView;
+    @BindView(R.id.progress_loading)
+    ProgressBar mProgressBar;
 
     CompositeDisposable mCompositeDisposable;
     private boolean isLoading;
@@ -64,10 +67,13 @@ public class MainActivity extends AppCompatActivity {
         mModel = ViewModelProviders.of(this).get(UserViewModel.class);
         mUsers.addAll(mModel.getUsers());
 
-        loadSaved();
+        if (mUsers.isEmpty()) {
+            loadSaved();
+        }
 
         if (mUsers.isEmpty()) {
             if (Utils.checkInternetConnection(this)) {
+                mProgressBar.setVisibility(View.VISIBLE);
                 downloadUsers();
             } else {
                 mEmptyView.setVisibility(View.VISIBLE);
@@ -114,15 +120,17 @@ public class MainActivity extends AppCompatActivity {
     private void handleResponse(List<User> users) {
         mUsers.addAll(users);
         mEmptyView.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.GONE);
         mRecyclerView.getAdapter().notifyDataSetChanged();
         mModel.addUsers(users);
-        mPreferences.edit().putString("users", mGson.toJson(mUsers)).apply();
+//        mPreferences.edit().putString("users", mGson.toJson(mUsers)).apply();
         isLoading = false;
     }
 
     private void handleError(Throwable error) {
         Log.e("MainActivity", error.getLocalizedMessage());
         isLoading = false;
+        mProgressBar.setVisibility(View.GONE);
         if (mUsers.isEmpty()) {
             mEmptyView.setVisibility(View.VISIBLE);
         }
@@ -132,5 +140,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         mCompositeDisposable.clear();
+    }@Override
+    public boolean onSupportNavigateUp() {
+        //This method is called when the up button is pressed. Just the pop back stack.
+        getSupportFragmentManager().popBackStack();
+        return true;
     }
 }

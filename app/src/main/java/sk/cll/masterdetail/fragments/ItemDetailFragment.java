@@ -6,12 +6,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import sk.cll.masterdetail.R;
+import sk.cll.masterdetail.activities.MainActivity;
 import sk.cll.masterdetail.data.User;
 import sk.cll.masterdetail.data.utils.PicassoCircleTransformation;
 
@@ -35,7 +37,7 @@ public class ItemDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.item_detail, container, false);
-//        mToolbar = getActivity().findViewById(R.id.toolbar);
+        ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         User u = null;
         if (getArguments() != null) {
@@ -44,7 +46,8 @@ public class ItemDetailFragment extends Fragment {
             }
         }
         if (u == null) {
-            //error toast close?
+            Toast.makeText(getActivity(), R.string.error_user_detail, Toast.LENGTH_LONG).show();
+            getFragmentManager().popBackStack();
         } else {
             TextView name = rootView.findViewById(R.id.tv_name);
             TextView age = rootView.findViewById(R.id.tv_age);
@@ -76,6 +79,8 @@ public class ItemDetailFragment extends Fragment {
         }
         return rootView;
     }
+
+
 
     @Override
     public void onDestroyView() {
