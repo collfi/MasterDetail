@@ -1,37 +1,23 @@
 package sk.cll.masterdetail.fragments;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.squareup.picasso.Picasso;
 
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import sk.cll.masterdetail.R;
-import sk.cll.masterdetail.activities.ItemDetailActivity;
-import sk.cll.masterdetail.activities.MainActivity;
-import sk.cll.masterdetail.dummy.DummyContent;
+import sk.cll.masterdetail.data.User;
+import sk.cll.masterdetail.data.utils.PicassoCircleTransformation;
 
-/**
- * A fragment representing a single Item detail screen.
- * This fragment is either contained in a {@link MainActivity}
- * in two-pane mode (on tablets) or a {@link ItemDetailActivity}
- * on handsets.
- */
 public class ItemDetailFragment extends Fragment {
-    /**
-     * The fragment argument representing the item ID that this fragment
-     * represents.
-     */
-    public static final String ARG_ITEM_ID = "item_id";
 
-    /**
-     * The dummy content this fragment is presenting.
-     */
-    private DummyContent.DummyItem mItem;
+    private Toolbar mToolbar;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -43,31 +29,59 @@ public class ItemDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (getArguments().containsKey(ARG_ITEM_ID)) {
-            // Load the dummy content specified by the fragment
-            // arguments. In a real-world scenario, use a Loader
-            // to load content from a content provider.
-            mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
-
-            Activity activity = this.getActivity();
-            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
-            if (appBarLayout != null) {
-                appBarLayout.setTitle(mItem.content);
-            }
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.item_detail, container, false);
+//        mToolbar = getActivity().findViewById(R.id.toolbar);
 
-        // Show the dummy content as text in a TextView.
-        if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.item_detail)).setText(mItem.details);
+        User u = null;
+        if (getArguments() != null) {
+            if (getArguments().containsKey("user")) {
+                u = getArguments().getParcelable("user");
+            }
         }
+        if (u == null) {
+            //error toast close?
+        } else {
+            TextView name = rootView.findViewById(R.id.tv_name);
+            TextView age = rootView.findViewById(R.id.tv_age);
+            TextView gender = rootView.findViewById(R.id.tv_gender);
+            TextView phone = rootView.findViewById(R.id.tv_phone);
+            TextView email = rootView.findViewById(R.id.tv_email);
+            TextView region = rootView.findViewById(R.id.tv_region);
 
+            name.setText(u.getFullName());
+            age.setText(String.valueOf(u.getAge()));
+            gender.setText(u.getGender());
+            phone.setText(u.getPhone());
+            email.setText(u.getEmail());
+            region.setText(u.getRegion());
+
+            ImageView photo = rootView.findViewById(R.id.img_photo_large);
+            Picasso.get().load(u.getPhoto())
+                    .transform(new PicassoCircleTransformation())
+                    .placeholder(R.drawable.placeholder_large)
+                    .into(photo);
+
+//            mToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.baseline_arrow_back_white_24));
+//            mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    //What to do on back clicked
+//                }
+//            });
+        }
         return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+//        Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
+//        toolbar.setNavigationIcon(null);
+
     }
 }

@@ -82,7 +82,7 @@ public class User implements Parcelable {
         photo = in.readString();
     }
 
-    public String getName() {
+    private String getName() {
         return name;
     }
 
@@ -90,7 +90,7 @@ public class User implements Parcelable {
         this.name = name;
     }
 
-    public String getSurname() {
+    private String getSurname() {
         return surname;
     }
 
@@ -99,7 +99,7 @@ public class User implements Parcelable {
     }
 
     public String getGender() {
-        return gender;
+        return gender.substring(0, 1).toUpperCase().concat(gender.substring(1));
     }
 
     public void setGender(String gender) {
@@ -144,6 +144,10 @@ public class User implements Parcelable {
 
     public void setPhoto(String photo) {
         this.photo = photo;
+    }
+
+    public String getFullName() {
+        return getName().concat(" ").concat(getSurname());
     }
 
     @Override

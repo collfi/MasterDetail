@@ -1,143 +1,136 @@
 package sk.cll.masterdetail.activities;
 
 import android.content.Context;
-import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 import sk.cll.masterdetail.R;
-import sk.cll.masterdetail.dummy.DummyContent;
-import sk.cll.masterdetail.fragments.ItemDetailFragment;
+import sk.cll.masterdetail.adapters.UserAdapter;
+import sk.cll.masterdetail.data.User;
+import sk.cll.masterdetail.data.UserViewModel;
+import sk.cll.masterdetail.data.utils.PaginationScrollListener;
+import sk.cll.masterdetail.data.utils.Utils;
+import sk.cll.masterdetail.service.Repository;
 
-/**
- * An activity representing a list of Items. This activity
- * has different presentations for handset and tablet-size devices. On
- * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link ItemDetailActivity} representing
- * item details. On tablets, the activity presents the list of items and
- * item details side-by-side using two vertical panes.
- */
 public class MainActivity extends AppCompatActivity {
 
-    /**
-     * Whether or not the activity is in two-pane mode, i.e. running on a tablet
-     * device.
-     */
-    private boolean mTwoPane;
+    @BindView(R.id.item_list)
+    RecyclerView mRecyclerView;
+    @BindView(R.id.tv_empty_view)
+    TextView mEmptyView;
+
+    CompositeDisposable mCompositeDisposable;
+    private boolean isLoading;
+    private List<User> mUsers;
+    private UserViewModel mModel;
+    private SharedPreferences mPreferences;
+    private Gson mGson;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        mPreferences = getPreferences(Context.MODE_PRIVATE);
+        mGson = new Gson();
+        mCompositeDisposable = new CompositeDisposable();
+        mUsers = new ArrayList<>();
+        mRecyclerView.setAdapter(new UserAdapter(mUsers, this));
+        mModel = ViewModelProviders.of(this).get(UserViewModel.class);
+        mUsers.addAll(mModel.getUsers());
+
+        loadSaved();
+
+        if (mUsers.isEmpty()) {
+            if (Utils.checkInternetConnection(this)) {
+                downloadUsers();
+            } else {
+                mEmptyView.setVisibility(View.VISIBLE);
+            }
+        } else {
+            mRecyclerView.getAdapter().notifyDataSetChanged();
+        }
+
+        mEmptyView.setOnClickListener(v -> downloadUsers());
+
+        mRecyclerView.addOnScrollListener(new PaginationScrollListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            protected void loadMoreItems() {
+                downloadUsers();
+            }
+
+            @Override
+            public boolean isLoading() {
+                return isLoading;
             }
         });
 
-        if (findViewById(R.id.item_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
-            mTwoPane = true;
-        }
-
-        View recyclerView = findViewById(R.id.item_list);
-        assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, DummyContent.ITEMS, mTwoPane));
+    private void loadSaved() {
+        if (mPreferences.contains("users")) {
+            Type listType = new TypeToken<ArrayList<User>>() {
+            }.getType();
+            List<User> users = mGson.fromJson(mPreferences.getString("users", ""), listType);
+            mUsers.addAll(users);
+        }
     }
 
-    public static class SimpleItemRecyclerViewAdapter
-            extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
+    private void downloadUsers() {
+        if (isLoading) return;
+        Toast.makeText(this, R.string.downloading, Toast.LENGTH_SHORT).show();
+        isLoading = true;
+        mCompositeDisposable.add(new Repository().executeUsersApi()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::handleResponse, this::handleError));
+    }
 
-        private final MainActivity mParentActivity;
-        private final List<DummyContent.DummyItem> mValues;
-        private final boolean mTwoPane;
-        private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DummyContent.DummyItem item = (DummyContent.DummyItem) view.getTag();
-                if (mTwoPane) {
-                    Bundle arguments = new Bundle();
-                    arguments.putString(ItemDetailFragment.ARG_ITEM_ID, item.id);
-                    ItemDetailFragment fragment = new ItemDetailFragment();
-                    fragment.setArguments(arguments);
-                    mParentActivity.getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.item_detail_container, fragment)
-                            .commit();
-                } else {
-                    Context context = view.getContext();
-                    Intent intent = new Intent(context, ItemDetailActivity.class);
-                    intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, item.id);
+    private void handleResponse(List<User> users) {
+        mUsers.addAll(users);
+        mEmptyView.setVisibility(View.GONE);
+        mRecyclerView.getAdapter().notifyDataSetChanged();
+        mModel.addUsers(users);
+        mPreferences.edit().putString("users", mGson.toJson(mUsers)).apply();
+        isLoading = false;
+    }
 
-                    context.startActivity(intent);
-                }
-            }
-        };
-
-        SimpleItemRecyclerViewAdapter(MainActivity parent,
-                                      List<DummyContent.DummyItem> items,
-                                      boolean twoPane) {
-            mValues = items;
-            mParentActivity = parent;
-            mTwoPane = twoPane;
+    private void handleError(Throwable error) {
+        Log.e("MainActivity", error.getLocalizedMessage());
+        isLoading = false;
+        if (mUsers.isEmpty()) {
+            mEmptyView.setVisibility(View.VISIBLE);
         }
+    }
 
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_list_content, parent, false);
-            return new ViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mIdView.setText(mValues.get(position).id);
-            holder.mContentView.setText(mValues.get(position).content);
-
-            holder.itemView.setTag(mValues.get(position));
-            holder.itemView.setOnClickListener(mOnClickListener);
-        }
-
-        @Override
-        public int getItemCount() {
-            return mValues.size();
-        }
-
-        class ViewHolder extends RecyclerView.ViewHolder {
-            final TextView mIdView;
-            final TextView mContentView;
-
-            ViewHolder(View view) {
-                super(view);
-                mIdView = (TextView) view.findViewById(R.id.tv_name);
-                mContentView = (TextView) view.findViewById(R.id.content);
-            }
-        }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mCompositeDisposable.clear();
     }
 }
