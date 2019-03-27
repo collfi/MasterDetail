@@ -50,24 +50,22 @@
             android:drawablePadding="8dp"
             android:drawableStart="@drawable/outline_wc_black_24"
             android:gravity="center_vertical"
-            app:layout_constraintEnd_toStartOf="@+id/tv_region"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_age"/>
+            app:layout_constraintTop_toBottomOf="@+id/tv_age"/>
 
         <TextView
             android:id="@+id/tv_region"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:drawableLeft="@drawable/outline_map_black_24"
             android:drawablePadding="8dp"
             android:drawableStart="@drawable/outline_map_black_24"
             android:gravity="center_vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tv_gender"
-            app:layout_constraintTop_toBottomOf="@id/tv_age"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_gender"/>
 
         <TextView
             android:id="@+id/tv_email"
@@ -80,37 +78,48 @@
             android:drawablePadding="8dp"
             android:drawableStart="@drawable/outline_email_black_24"
             android:gravity="center_vertical"
-            app:layout_constraintEnd_toStartOf="@+id/tv_phone"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_gender"/>
+            app:layout_constraintTop_toBottomOf="@+id/tv_region"/>
 
         <TextView
             android:id="@+id/tv_phone"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:drawableLeft="@drawable/outline_phone_black_24"
             android:drawablePadding="8dp"
             android:drawableStart="@drawable/outline_phone_black_24"
             android:gravity="center_vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tv_email"
-            app:layout_constraintTop_toBottomOf="@+id/tv_region"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_email"/>
+
+        <ImageView
+            android:id="@+id/img_bio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+
+            android:contentDescription="@string/info"
+            android:src="@drawable/outline_info_black_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_phone"/>
 
         <TextView
             android:id="@+id/tv_bio"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:paddingEnd="16dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:paddingStart="16dp"
             android:text="@string/lorem_ipsum"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_email"/>
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintStart_toEndOf="@+id/img_bio"
+            app:layout_constraintTop_toTopOf="@+id/img_bio"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
