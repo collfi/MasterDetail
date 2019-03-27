@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
         if (old != null) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .setTransition(FragmentTransaction.TRANSIT_NONE)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                     .remove(old)
                     .commit();
         }
