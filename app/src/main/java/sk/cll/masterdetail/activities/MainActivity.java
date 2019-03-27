@@ -19,15 +19,14 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.disposables.CompositeDisposable;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.internal.EverythingIsNonNull;
 import sk.cll.masterdetail.R;
 import sk.cll.masterdetail.adapters.UserAdapter;
-import sk.cll.masterdetail.db.User;
 import sk.cll.masterdetail.data.UserAndroidViewModel;
+import sk.cll.masterdetail.db.User;
 import sk.cll.masterdetail.utils.PaginationScrollListener;
 import sk.cll.masterdetail.utils.Utils;
 
@@ -42,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
 
-    CompositeDisposable mCompositeDisposable;
     private boolean isLoading;
     private List<User> mUsers;
     private UserAndroidViewModel mModel;
@@ -58,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         mToolbar.setTitle(getTitle());
 
-        mCompositeDisposable = new CompositeDisposable();
         mUsers = new ArrayList<>();
         mRecyclerView.setAdapter(new UserAdapter(mUsers, this));
         mModel = ViewModelProviders.of(this).get(UserAndroidViewModel.class);

@@ -21,8 +21,8 @@ import butterknife.ButterKnife;
 import sk.cll.masterdetail.R;
 import sk.cll.masterdetail.activities.MainActivity;
 import sk.cll.masterdetail.db.User;
-import sk.cll.masterdetail.utils.PicassoCircleTransformation;
 import sk.cll.masterdetail.fragments.ItemDetailFragment;
+import sk.cll.masterdetail.utils.PicassoCircleTransformation;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> {
     private List<User> data;
@@ -64,15 +64,10 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> 
                     .into(holder.photo);
             holder.itemView.setTag(data.get(position));
             holder.itemView.setOnClickListener(v -> {
-
                 FragmentManager fm = ((MainActivity) context).getSupportFragmentManager();
-                Fragment old = fm.findFragmentByTag("detail");
-                if (old != null) {
-                    fm.beginTransaction().remove(old).commit();
-                }
                 Fragment fragment = ItemDetailFragment.newInstance(data.get(position));
                 fm.beginTransaction()
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                         .replace(R.id.item_detail_container, fragment, "detail")
                         .commit();
             });
