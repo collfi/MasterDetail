@@ -11,8 +11,8 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import sk.cll.masterdetail.data.User;
-import sk.cll.masterdetail.data.utils.Utils;
+import sk.cll.masterdetail.db.User;
+import sk.cll.masterdetail.utils.Utils;
 import sk.cll.masterdetail.db.UserDao;
 import sk.cll.masterdetail.db.UserRoomDatabase;
 

@@ -7,6 +7,7 @@ import java.util.List;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import retrofit2.Call;
+import sk.cll.masterdetail.db.User;
 import sk.cll.masterdetail.service.Repository;
 
 public class UserAndroidViewModel extends AndroidViewModel {

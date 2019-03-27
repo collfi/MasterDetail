@@ -20,8 +20,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import sk.cll.masterdetail.R;
 import sk.cll.masterdetail.activities.MainActivity;
-import sk.cll.masterdetail.data.User;
-import sk.cll.masterdetail.data.utils.PicassoCircleTransformation;
+import sk.cll.masterdetail.db.User;
+import sk.cll.masterdetail.utils.PicassoCircleTransformation;
 import sk.cll.masterdetail.fragments.ItemDetailFragment;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> {

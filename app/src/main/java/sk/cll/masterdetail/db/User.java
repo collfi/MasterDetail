@@ -1,4 +1,4 @@
-package sk.cll.masterdetail.data;
+package sk.cll.masterdetail.db;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -177,6 +178,7 @@ public class User implements Parcelable {
     }
 
     @Override
+    @NonNull
     public String toString() {
         return "User{" +
                 "id=" + id +

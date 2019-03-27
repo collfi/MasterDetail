@@ -23,12 +23,13 @@ import io.reactivex.disposables.CompositeDisposable;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.internal.EverythingIsNonNull;
 import sk.cll.masterdetail.R;
 import sk.cll.masterdetail.adapters.UserAdapter;
-import sk.cll.masterdetail.data.User;
+import sk.cll.masterdetail.db.User;
 import sk.cll.masterdetail.data.UserAndroidViewModel;
-import sk.cll.masterdetail.data.utils.PaginationScrollListener;
-import sk.cll.masterdetail.data.utils.Utils;
+import sk.cll.masterdetail.utils.PaginationScrollListener;
+import sk.cll.masterdetail.utils.Utils;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -66,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
         mCallback = new Callback<List<User>>() {
             @Override
+            @EverythingIsNonNull
             public void onResponse(Call<List<User>> call, Response<List<User>> response) {
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
@@ -81,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
+            @EverythingIsNonNull
             public void onFailure(Call<List<User>> call, Throwable t) {
                 showError(t.getLocalizedMessage());
             }
@@ -130,15 +133,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-//    private void loadSaved() {
-//        if (mPreferences.contains("users")) {
-//            Type listType = new TypeToken<ArrayList<User>>() {
-//            }.getType();
-//            List<User> users = mGson.fromJson(mPreferences.getString("users", ""), listType);
-//            mUsers.addAll(users);
-//        }
-//    }
-
     private void downloadUsers() {
         if (Utils.checkInternetConnection(this)) {
             if (isLoading) return;
@@ -151,28 +145,6 @@ public class MainActivity extends AppCompatActivity {
             mProgressBar.setVisibility(View.GONE);
         }
     }
-
-//    private void handleResponse(List<User> users) {
-////        mUsers.addAll(users);
-//        mEmptyView.setVisibility(View.GONE);
-//        mProgressBar.setVisibility(View.GONE);
-////        mRecyclerView.getAdapter().notifyDataSetChanged();
-////        mModel.addUsers(users);
-////        mPreferences.edit().putString("users", mGson.toJson(mUsers)).apply();
-//        mModel.insert(users);
-//
-//
-//        isLoading = false;
-//    }
-//
-//    private void handleError(Throwable error) {
-//        Log.e("MainActivity", error.getLocalizedMessage());
-//        isLoading = false;
-//        mProgressBar.setVisibility(View.GONE);
-//        if (mUsers.isEmpty()) {
-//            mEmptyView.setVisibility(View.VISIBLE);
-//        }
-//    }
 
     private void removeDetailFragment() {
         Fragment old = getSupportFragmentManager().findFragmentByTag("detail");

@@ -5,7 +5,6 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-import sk.cll.masterdetail.data.User;
 
 @Database(entities = {User.class}, version = 1)
 public abstract class UserRoomDatabase extends RoomDatabase {

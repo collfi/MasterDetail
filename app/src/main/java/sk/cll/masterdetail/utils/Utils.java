@@ -1,4 +1,4 @@
-package sk.cll.masterdetail.data.utils;
+package sk.cll.masterdetail.utils;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

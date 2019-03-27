@@ -1,4 +1,4 @@
-package sk.cll.masterdetail.data.utils;
+package sk.cll.masterdetail.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;

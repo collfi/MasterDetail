@@ -11,13 +11,14 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import sk.cll.masterdetail.R;
 import sk.cll.masterdetail.activities.MainActivity;
-import sk.cll.masterdetail.data.User;
-import sk.cll.masterdetail.data.utils.PicassoCircleTransformation;
+import sk.cll.masterdetail.db.User;
+import sk.cll.masterdetail.utils.PicassoCircleTransformation;
 
 public class ItemDetailFragment extends Fragment {
 
@@ -45,10 +46,6 @@ public class ItemDetailFragment extends Fragment {
         return itemDetailFragment;
     }
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
     public ItemDetailFragment() {
     }
 
@@ -58,7 +55,7 @@ public class ItemDetailFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.item_detail, container, false);
         ButterKnife.bind(this, rootView);
