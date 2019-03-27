@@ -6,41 +6,57 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "users")
 public class User implements Parcelable {
 
     public User() {
     }
 
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+
     @SerializedName("name")
     @Expose
+    @ColumnInfo(name = "first_name")
     private String name;
 
     @SerializedName("surname")
     @Expose
+    @ColumnInfo(name = "sur_name")
     private String surname;
 
     @SerializedName("gender")
     @Expose
+    @ColumnInfo(name = "gender")
     private String gender;
 
     @SerializedName("region")
     @Expose
+    @ColumnInfo(name = "region")
     private String region;
 
     @SerializedName("age")
     @Expose
+    @ColumnInfo(name = "age")
     private int age;
 
     @SerializedName("phone")
     @Expose
+    @ColumnInfo(name = "phone")
     private String phone;
 
     @SerializedName("email")
     @Expose
+    @ColumnInfo(name = "email")
     private String email;
 
     @SerializedName("photo")
     @Expose
+    @ColumnInfo(name = "photo")
     private String photo;
 
     @Override
@@ -50,6 +66,7 @@ public class User implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
         dest.writeString(name);
         dest.writeString(surname);
         dest.writeInt(age);
@@ -72,6 +89,7 @@ public class User implements Parcelable {
     };
 
     private User(Parcel in) {
+        id = in.readInt();
         name = in.readString();
         surname = in.readString();
         age = in.readInt();
@@ -82,7 +100,7 @@ public class User implements Parcelable {
         photo = in.readString();
     }
 
-    private String getName() {
+    public String getName() {
         return name;
     }
 
@@ -90,7 +108,7 @@ public class User implements Parcelable {
         this.name = name;
     }
 
-    private String getSurname() {
+    public String getSurname() {
         return surname;
     }
 
@@ -150,10 +168,19 @@ public class User implements Parcelable {
         return getName().concat(" ").concat(getSurname());
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return "User{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", gender='" + gender + '\'' +
                 ", region='" + region + '\'' +

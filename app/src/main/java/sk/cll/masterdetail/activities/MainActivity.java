@@ -1,7 +1,5 @@
 package sk.cll.masterdetail.activities;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,10 +8,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,16 +19,16 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import sk.cll.masterdetail.R;
 import sk.cll.masterdetail.adapters.UserAdapter;
 import sk.cll.masterdetail.data.User;
-import sk.cll.masterdetail.data.UserViewModel;
+import sk.cll.masterdetail.data.UserAndroidViewModel;
 import sk.cll.masterdetail.data.utils.PaginationScrollListener;
 import sk.cll.masterdetail.data.utils.Utils;
-import sk.cll.masterdetail.service.Repository;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -50,9 +44,8 @@ public class MainActivity extends AppCompatActivity {
     CompositeDisposable mCompositeDisposable;
     private boolean isLoading;
     private List<User> mUsers;
-    private UserViewModel mModel;
-    private SharedPreferences mPreferences;
-    private Gson mGson;
+    private UserAndroidViewModel mModel;
+    private Callback<List<User>> mCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,32 +57,48 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         mToolbar.setTitle(getTitle());
 
-
-        mPreferences = getPreferences(Context.MODE_PRIVATE);
-        mGson = new Gson();
         mCompositeDisposable = new CompositeDisposable();
         mUsers = new ArrayList<>();
         mRecyclerView.setAdapter(new UserAdapter(mUsers, this));
-        mModel = ViewModelProviders.of(this).get(UserViewModel.class);
-        mUsers.addAll(mModel.getUsers());
+        mModel = ViewModelProviders.of(this).get(UserAndroidViewModel.class);
 
-        if (mUsers.isEmpty()) {
-            loadSaved();
-        }
+        mProgressBar.setVisibility(View.VISIBLE);
 
-        if (mUsers.isEmpty()) {
-            if (Utils.checkInternetConnection(this)) {
-                mProgressBar.setVisibility(View.VISIBLE);
-                downloadUsers();
-            } else {
-                mEmptyView.setVisibility(View.VISIBLE);
+        mCallback = new Callback<List<User>>() {
+            @Override
+            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                if (response.isSuccessful()) {
+                    if (response.body() != null) {
+                        mProgressBar.setVisibility(View.GONE);
+                        mUsers.addAll(response.body());
+                        mRecyclerView.getAdapter().notifyDataSetChanged();
+                        isLoading = false;
+                        mModel.insert(response.body());
+                    }
+                } else {
+                    showError(response.message());
+                }
             }
-        } else {
-            mRecyclerView.getAdapter().notifyDataSetChanged();
-        }
+
+            @Override
+            public void onFailure(Call<List<User>> call, Throwable t) {
+                showError(t.getLocalizedMessage());
+            }
+
+            private void showError(String error) {
+                Log.e("MainActivity", error);
+                Toast.makeText(MainActivity.this, R.string.error_loading, Toast.LENGTH_SHORT).show();
+                mProgressBar.setVisibility(View.GONE);
+                if (mUsers.isEmpty()) {
+                    mEmptyView.setVisibility(View.VISIBLE);
+                }
+                isLoading = false;
+            }
+        };
 
         mEmptyView.setOnClickListener(v -> {
             mProgressBar.setVisibility(View.VISIBLE);
+            mEmptyView.setVisibility(View.GONE);
             downloadUsers();
         });
 
@@ -105,51 +114,65 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        mModel.getAllUsers().observe(this, users -> {
+            if (users != null) {
+                if (users.isEmpty()) {
+                    downloadUsers();
+                    return;
+                }
+                if (mUsers.isEmpty()) {
+                    mUsers.addAll(users);
+                    mRecyclerView.getAdapter().notifyDataSetChanged();
+                    mProgressBar.setVisibility(View.GONE);
+                    isLoading = false;
+                }
+            }
+        });
     }
 
-    private void loadSaved() {
-        if (mPreferences.contains("users")) {
-            Type listType = new TypeToken<ArrayList<User>>() {
-            }.getType();
-            List<User> users = mGson.fromJson(mPreferences.getString("users", ""), listType);
-            mUsers.addAll(users);
-        }
-    }
+//    private void loadSaved() {
+//        if (mPreferences.contains("users")) {
+//            Type listType = new TypeToken<ArrayList<User>>() {
+//            }.getType();
+//            List<User> users = mGson.fromJson(mPreferences.getString("users", ""), listType);
+//            mUsers.addAll(users);
+//        }
+//    }
 
     private void downloadUsers() {
-        if (isLoading) return;
-        Toast.makeText(this, R.string.downloading, Toast.LENGTH_SHORT).show();
-        isLoading = true;
-        mCompositeDisposable.add(new Repository().executeUsersApi()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponse, this::handleError));
-    }
-
-    private void handleResponse(List<User> users) {
-        mUsers.addAll(users);
-        mEmptyView.setVisibility(View.GONE);
-        mProgressBar.setVisibility(View.GONE);
-        mRecyclerView.getAdapter().notifyDataSetChanged();
-        mModel.addUsers(users);
-        mPreferences.edit().putString("users", mGson.toJson(mUsers)).apply();
-        isLoading = false;
-    }
-
-    private void handleError(Throwable error) {
-        Log.e("MainActivity", error.getLocalizedMessage());
-        isLoading = false;
-        mProgressBar.setVisibility(View.GONE);
-        if (mUsers.isEmpty()) {
-            mEmptyView.setVisibility(View.VISIBLE);
+        if (Utils.checkInternetConnection(this)) {
+            if (isLoading) return;
+            Toast.makeText(this, R.string.downloading, Toast.LENGTH_SHORT).show();
+            isLoading = true;
+            mModel.getAndSaveNewUsers().enqueue(mCallback);
+        } else {
+            Toast.makeText(this, R.string.error_internet, Toast.LENGTH_SHORT).show();
+            mEmptyView.setVisibility(mUsers.isEmpty() ? View.VISIBLE : View.GONE);
+            mProgressBar.setVisibility(View.GONE);
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mCompositeDisposable.clear();
-    }
+//    private void handleResponse(List<User> users) {
+////        mUsers.addAll(users);
+//        mEmptyView.setVisibility(View.GONE);
+//        mProgressBar.setVisibility(View.GONE);
+////        mRecyclerView.getAdapter().notifyDataSetChanged();
+////        mModel.addUsers(users);
+////        mPreferences.edit().putString("users", mGson.toJson(mUsers)).apply();
+//        mModel.insert(users);
+//
+//
+//        isLoading = false;
+//    }
+//
+//    private void handleError(Throwable error) {
+//        Log.e("MainActivity", error.getLocalizedMessage());
+//        isLoading = false;
+//        mProgressBar.setVisibility(View.GONE);
+//        if (mUsers.isEmpty()) {
+//            mEmptyView.setVisibility(View.VISIBLE);
+//        }
+//    }
 
     private void removeDetailFragment() {
         Fragment old = getSupportFragmentManager().findFragmentByTag("detail");

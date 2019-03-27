@@ -8,6 +8,7 @@ public class Utils {
 
     public static final String BASE_URL = "https://uinames.com/";
     public static final int LIMIT = 15;
+    public static final boolean EXT = true;
 
     public static boolean checkInternetConnection(Context context) {
         ConnectivityManager connectivity = (ConnectivityManager) context

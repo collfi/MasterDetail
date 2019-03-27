@@ -40,7 +40,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> 
         @BindView(R.id.tv_name)
         TextView name;
 
-        public MyViewHolder(@NonNull View itemView) {
+        MyViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
@@ -56,29 +56,37 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.name.setText(data.get(position).getFullName());
-        Picasso.get().load(data.get(position).getPhoto())
-                .transform(new PicassoCircleTransformation())
-                .placeholder(R.drawable.placeholder_small)
-                .into(holder.photo);
-        holder.itemView.setTag(data.get(position));
-        holder.itemView.setOnClickListener(v -> {
+        if (data != null) {
+            holder.name.setText(data.get(position).getFullName());
+            Picasso.get().load(data.get(position).getPhoto())
+                    .transform(new PicassoCircleTransformation())
+                    .placeholder(R.drawable.placeholder_small)
+                    .into(holder.photo);
+            holder.itemView.setTag(data.get(position));
+            holder.itemView.setOnClickListener(v -> {
 
-            FragmentManager fm = ((MainActivity) context).getSupportFragmentManager();
-            Fragment old = fm.findFragmentByTag("detail");
-            if (old != null) {
-                fm.beginTransaction().remove(old).commit();
-            }
-            Fragment fragment = ItemDetailFragment.newInstance(data.get(position));
-            fm.beginTransaction()
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                    .replace(R.id.item_detail_container, fragment, "detail")
-                    .commit();
-        });
+                FragmentManager fm = ((MainActivity) context).getSupportFragmentManager();
+                Fragment old = fm.findFragmentByTag("detail");
+                if (old != null) {
+                    fm.beginTransaction().remove(old).commit();
+                }
+                Fragment fragment = ItemDetailFragment.newInstance(data.get(position));
+                fm.beginTransaction()
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .replace(R.id.item_detail_container, fragment, "detail")
+                        .commit();
+            });
+        } else {
+            holder.name.setText(R.string.loading);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return data.size();
+        if (data == null) {
+            return 0;
+        } else {
+            return data.size();
+        }
     }
 }

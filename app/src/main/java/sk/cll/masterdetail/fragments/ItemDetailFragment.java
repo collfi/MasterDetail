@@ -11,8 +11,9 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import sk.cll.masterdetail.R;
 import sk.cll.masterdetail.activities.MainActivity;
 import sk.cll.masterdetail.data.User;
@@ -20,7 +21,21 @@ import sk.cll.masterdetail.data.utils.PicassoCircleTransformation;
 
 public class ItemDetailFragment extends Fragment {
 
-    private Toolbar mToolbar;
+    @BindView(R.id.tv_name)
+    TextView mName;
+    @BindView(R.id.tv_age)
+    TextView mAge;
+    @BindView(R.id.tv_region)
+    TextView mRegion;
+    @BindView(R.id.tv_gender)
+    TextView mGender;
+    @BindView(R.id.tv_phone)
+    TextView mPhone;
+    @BindView(R.id.tv_email)
+    TextView mEmail;
+    @BindView(R.id.img_photo_large)
+    ImageView mPhoto;
+
 
     public static ItemDetailFragment newInstance(User arg) {
         ItemDetailFragment itemDetailFragment = new ItemDetailFragment();
@@ -46,10 +61,12 @@ public class ItemDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.item_detail, container, false);
+        ButterKnife.bind(this, rootView);
 
         int orientation = getResources().getConfiguration().orientation;
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            if (getActivity() != null && ((MainActivity) getActivity()).getSupportActionBar() != null)
+                ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
         User u = null;
@@ -60,46 +77,19 @@ public class ItemDetailFragment extends Fragment {
         }
         if (u == null) {
             Toast.makeText(getActivity(), R.string.error_user_detail, Toast.LENGTH_LONG).show();
-            getFragmentManager().popBackStack();
         } else {
-            TextView name = rootView.findViewById(R.id.tv_name);
-            TextView age = rootView.findViewById(R.id.tv_age);
-            TextView gender = rootView.findViewById(R.id.tv_gender);
-            TextView phone = rootView.findViewById(R.id.tv_phone);
-            TextView email = rootView.findViewById(R.id.tv_email);
-            TextView region = rootView.findViewById(R.id.tv_region);
+            mName.setText(u.getFullName());
+            mAge.setText(String.valueOf(u.getAge()));
+            mGender.setText(u.getGender());
+            mPhone.setText(u.getPhone());
+            mEmail.setText(u.getEmail());
+            mRegion.setText(u.getRegion());
 
-            name.setText(u.getFullName());
-            age.setText(String.valueOf(u.getAge()));
-            gender.setText(u.getGender());
-            phone.setText(u.getPhone());
-            email.setText(u.getEmail());
-            region.setText(u.getRegion());
-
-            ImageView photo = rootView.findViewById(R.id.img_photo_large);
             Picasso.get().load(u.getPhoto())
                     .transform(new PicassoCircleTransformation())
                     .placeholder(R.drawable.placeholder_large)
-                    .into(photo);
-
-//            mToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.baseline_arrow_back_white_24));
-//            mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    //What to do on back clicked
-//                }
-//            });
+                    .into(mPhoto);
         }
         return rootView;
-    }
-
-
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-//        Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
-//        toolbar.setNavigationIcon(null);
-
     }
 }
