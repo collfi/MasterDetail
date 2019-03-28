@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import sk.cll.masterdetail.R;
 import sk.cll.masterdetail.activities.MainActivity;
 import sk.cll.masterdetail.db.User;
@@ -37,6 +38,7 @@ public class ItemDetailFragment extends Fragment {
     @BindView(R.id.img_photo_large)
     ImageView mPhoto;
 
+    private Unbinder unbinder;
 
     public static ItemDetailFragment newInstance(User arg) {
         ItemDetailFragment itemDetailFragment = new ItemDetailFragment();
@@ -58,7 +60,7 @@ public class ItemDetailFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.item_detail, container, false);
-        ButterKnife.bind(this, rootView);
+        unbinder = ButterKnife.bind(this, rootView);
 
         int orientation = getResources().getConfiguration().orientation;
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -88,5 +90,11 @@ public class ItemDetailFragment extends Fragment {
                     .into(mPhoto);
         }
         return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 }
