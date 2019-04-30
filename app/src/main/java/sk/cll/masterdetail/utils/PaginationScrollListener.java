@@ -18,7 +18,7 @@ public abstract class PaginationScrollListener extends RecyclerView.OnScrollList
         if (!isLoading()) {
             if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
                     && firstVisibleItemPosition >= 0
-                    && totalItemCount >= Utils.LIMIT) {
+                    && totalItemCount >= KUtils.getLIMIT()) {
                 loadMoreItems();
             }
         }

@@ -17,30 +17,30 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import sk.cll.masterdetail.R;
-import sk.cll.masterdetail.activities.MainActivity;
-import sk.cll.masterdetail.db.User;
-import sk.cll.masterdetail.utils.PicassoCircleTransformation;
+import sk.cll.masterdetail.activities.KMainActivity;
+import sk.cll.masterdetail.db.KUser;
+import sk.cll.masterdetail.utils.KPicassoCircleTransformation;
 
 public class ItemDetailFragment extends Fragment {
 
-    @BindView(R.id.tv_name)
+    @BindView(R.id.mName)
     TextView mName;
-    @BindView(R.id.tv_age)
+    @BindView(R.id.mAge)
     TextView mAge;
-    @BindView(R.id.tv_region)
+    @BindView(R.id.mRegion)
     TextView mRegion;
-    @BindView(R.id.tv_gender)
+    @BindView(R.id.mGender)
     TextView mGender;
-    @BindView(R.id.tv_phone)
+    @BindView(R.id.mPhone)
     TextView mPhone;
-    @BindView(R.id.tv_email)
+    @BindView(R.id.mEmail)
     TextView mEmail;
-    @BindView(R.id.img_photo_large)
+    @BindView(R.id.mPhoto)
     ImageView mPhoto;
 
     private Unbinder unbinder;
 
-    public static ItemDetailFragment newInstance(User arg) {
+    public static ItemDetailFragment newInstance(KUser arg) {
         ItemDetailFragment itemDetailFragment = new ItemDetailFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable("user", arg);
@@ -64,11 +64,11 @@ public class ItemDetailFragment extends Fragment {
 
         int orientation = getResources().getConfiguration().orientation;
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            if (getActivity() != null && ((MainActivity) getActivity()).getSupportActionBar() != null)
-                ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            if (getActivity() != null && ((KMainActivity) getActivity()).getSupportActionBar() != null)
+                ((KMainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        User u = null;
+        KUser u = null;
         if (getArguments() != null) {
             if (getArguments().containsKey("user")) {
                 u = getArguments().getParcelable("user");
@@ -85,7 +85,7 @@ public class ItemDetailFragment extends Fragment {
             mRegion.setText(u.getRegion());
 
             Picasso.get().load(u.getPhoto())
-                    .transform(new PicassoCircleTransformation())
+                    .transform(new KPicassoCircleTransformation())
                     .placeholder(R.drawable.placeholder_large)
                     .into(mPhoto);
         }

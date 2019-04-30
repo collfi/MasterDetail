@@ -24,27 +24,27 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.internal.EverythingIsNonNull;
 import sk.cll.masterdetail.R;
-import sk.cll.masterdetail.adapters.UserAdapter;
-import sk.cll.masterdetail.data.UserAndroidViewModel;
-import sk.cll.masterdetail.db.User;
-import sk.cll.masterdetail.utils.PaginationScrollListener;
-import sk.cll.masterdetail.utils.Utils;
+import sk.cll.masterdetail.adapters.KUserAdapter;
+import sk.cll.masterdetail.data.KUserAndroidViewModel;
+import sk.cll.masterdetail.db.KUser;
+import sk.cll.masterdetail.utils.KPaginationScrollListener;
+import sk.cll.masterdetail.utils.KUtils;
 
 public class MainActivity extends AppCompatActivity {
 
-    @BindView(R.id.item_list)
+    @BindView(R.id.mRecyclerView)
     RecyclerView mRecyclerView;
-    @BindView(R.id.tv_empty_view)
+    @BindView(R.id.mEmptyView)
     TextView mEmptyView;
-    @BindView(R.id.progress_loading)
+    @BindView(R.id.mProgressBar)
     ProgressBar mProgressBar;
-    @BindView(R.id.toolbar)
+    @BindView(R.id.mToolbar)
     Toolbar mToolbar;
 
     private boolean isLoading;
-    private List<User> mUsers;
-    private UserAndroidViewModel mModel;
-    private Callback<List<User>> mCallback;
+    private List<KUser> mUsers;
+    private KUserAndroidViewModel mModel;
+    private Callback<List<KUser>> mCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,20 +52,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        mToolbar = findViewById(R.id.toolbar);
+//        mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         mToolbar.setTitle(getTitle());
 
         mUsers = new ArrayList<>();
-        mRecyclerView.setAdapter(new UserAdapter(mUsers, this));
-        mModel = ViewModelProviders.of(this).get(UserAndroidViewModel.class);
+        mRecyclerView.setAdapter(new KUserAdapter(mUsers, this));
+        mModel = ViewModelProviders.of(this).get(KUserAndroidViewModel.class);
 
         mProgressBar.setVisibility(View.VISIBLE);
 
-        mCallback = new Callback<List<User>>() {
+        mCallback = new Callback<List<KUser>>() {
             @Override
             @EverythingIsNonNull
-            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+            public void onResponse(Call<List<KUser>> call, Response<List<KUser>> response) {
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
                         mProgressBar.setVisibility(View.GONE);
@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             @EverythingIsNonNull
-            public void onFailure(Call<List<User>> call, Throwable t) {
+            public void onFailure(Call<List<KUser>> call, Throwable t) {
                 showError(t.getLocalizedMessage());
             }
 
@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
             downloadUsers();
         });
 
-        mRecyclerView.addOnScrollListener(new PaginationScrollListener() {
+        mRecyclerView.addOnScrollListener(new KPaginationScrollListener() {
             @Override
             protected void loadMoreItems() {
                 downloadUsers();
@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mModel.getAllUsers().observe(this, users -> {
+        mModel.getMAllUsers().observe(this, users -> {
             if (users != null) {
                 if (users.isEmpty()) {
                     downloadUsers();
@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void downloadUsers() {
-        if (Utils.checkInternetConnection(this)) {
+        if (KUtils.checkNetworkConnection(this)) {
             if (isLoading) return;
             Toast.makeText(this, R.string.downloading, Toast.LENGTH_SHORT).show();
             isLoading = true;

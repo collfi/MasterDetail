@@ -1,14 +1,10 @@
 package sk.cll.masterdetail.db;
 
-import android.content.Context;
-
-import androidx.room.Database;
-import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {User.class}, version = 1)
+//@Database(entities = {KUser.class}, version = 1)
 public abstract class UserRoomDatabase extends RoomDatabase {
-    public abstract UserDao mUserDao();
+    /*public abstract UserDao mUserDao();
 
     //SINGLETON
     private static UserRoomDatabase INSTANCE;
@@ -24,5 +20,5 @@ public abstract class UserRoomDatabase extends RoomDatabase {
             }
         }
         return INSTANCE;
-    }
+    }*/
 }

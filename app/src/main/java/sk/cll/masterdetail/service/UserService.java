@@ -5,10 +5,10 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
-import sk.cll.masterdetail.db.User;
+import sk.cll.masterdetail.db.KUser;
 
 public interface UserService {
     @GET("api")
-    Call<List<User>> getNewUsers(@Query("ext") boolean ext, @Query("amount") int amount);
+    Call<List<KUser>> getNewUsers(@Query("ext") boolean ext, @Query("amount") int amount);
 }
 

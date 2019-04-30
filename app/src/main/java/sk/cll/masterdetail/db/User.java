@@ -1,20 +1,9 @@
 package sk.cll.masterdetail.db;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+//@Entity(tableName = "users")
+public class User /*implements Parcelable*/ {
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
-import androidx.annotation.NonNull;
-import androidx.room.ColumnInfo;
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
-
-@Entity(tableName = "users")
-public class User implements Parcelable {
-
-    public User() {
+    /*public User() {
     }
 
     @PrimaryKey(autoGenerate = true)
@@ -191,5 +180,5 @@ public class User implements Parcelable {
                 ", email='" + email + '\'' +
                 ", photo='" + photo + '\'' +
                 '}';
-    }
+    }*/
 }

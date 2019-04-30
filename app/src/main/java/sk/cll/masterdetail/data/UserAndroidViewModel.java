@@ -7,31 +7,31 @@ import java.util.List;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import retrofit2.Call;
-import sk.cll.masterdetail.db.User;
-import sk.cll.masterdetail.service.Repository;
+import sk.cll.masterdetail.db.KUser;
+import sk.cll.masterdetail.service.KRepository;
 
 public class UserAndroidViewModel extends AndroidViewModel {
 
-    private Repository mRepository;
+    private KRepository mRepository;
 
-    private LiveData<List<User>> mAllUsers;
+    private LiveData<List<KUser>> mAllUsers;
 
 
     public UserAndroidViewModel(Application application) {
         super(application);
-        mRepository = new Repository(application);
+        mRepository = new KRepository(application);
         mAllUsers = mRepository.getAllUsers();
     }
 
-    public LiveData<List<User>> getAllUsers() {
+    public LiveData<List<KUser>> getAllUsers() {
         return mAllUsers;
     }
 
-    public Call<List<User>> getAndSaveNewUsers() {
+    public Call<List<KUser>> getAndSaveNewUsers() {
         return mRepository.executeApi();
     }
 
-    public void insert(List<User> users) {
+    public void insert(List<KUser> users) {
         mRepository.insert(users);
     }
 }

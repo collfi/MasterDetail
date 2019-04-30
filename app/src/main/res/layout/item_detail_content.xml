@@ -10,7 +10,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/img_photo_large"
+            android:id="@+id/mPhoto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
@@ -20,27 +20,27 @@
             app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
-            android:id="@+id/tv_name"
+            android:id="@+id/mName"
             style="?textAppearanceHeadline4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_photo_large"/>
+            app:layout_constraintTop_toBottomOf="@+id/mPhoto"/>
 
         <TextView
-            android:id="@+id/tv_age"
+            android:id="@+id/mAge"
             style="?textAppearanceHeadline6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_name"/>
+            app:layout_constraintTop_toBottomOf="@+id/mName"/>
 
         <TextView
-            android:id="@+id/tv_gender"
+            android:id="@+id/mGender"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
@@ -51,10 +51,10 @@
             android:drawableStart="@drawable/outline_wc_black_24"
             android:gravity="center_vertical"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_age"/>
+            app:layout_constraintTop_toBottomOf="@+id/mAge"/>
 
         <TextView
-            android:id="@+id/tv_region"
+            android:id="@+id/mRegion"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
@@ -65,10 +65,10 @@
             android:drawableStart="@drawable/outline_map_black_24"
             android:gravity="center_vertical"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_gender"/>
+            app:layout_constraintTop_toBottomOf="@+id/mGender"/>
 
         <TextView
-            android:id="@+id/tv_email"
+            android:id="@+id/mEmail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
@@ -79,10 +79,10 @@
             android:drawableStart="@drawable/outline_email_black_24"
             android:gravity="center_vertical"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_region"/>
+            app:layout_constraintTop_toBottomOf="@+id/mRegion"/>
 
         <TextView
-            android:id="@+id/tv_phone"
+            android:id="@+id/mPhone"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
@@ -93,7 +93,7 @@
             android:drawableStart="@drawable/outline_phone_black_24"
             android:gravity="center_vertical"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_email"/>
+            app:layout_constraintTop_toBottomOf="@+id/mEmail"/>
 
         <ImageView
             android:id="@+id/img_bio"
@@ -106,7 +106,7 @@
             android:contentDescription="@string/info"
             android:src="@drawable/outline_info_black_24"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_phone"/>
+            app:layout_constraintTop_toBottomOf="@+id/mPhone"/>
 
         <TextView
             android:id="@+id/tv_bio"

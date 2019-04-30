@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/item_list"
+        android:id="@+id/mRecyclerView"
         android:name="sk.cll.masterdetail.fragments.ItemListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -17,11 +17,11 @@
         android:focusable="true"
         android:focusableInTouchMode="true"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:context=".activities.MainActivity"
+        tools:context=".activities.KMainActivity"
         tools:listitem="@layout/item_list_content"/>
 
     <ProgressBar
-        android:id="@+id/progress_loading"
+        android:id="@+id/mProgressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -29,7 +29,7 @@
         android:visibility="gone"/>
 
     <TextView
-        android:id="@+id/tv_empty_view"
+        android:id="@+id/mEmptyView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"

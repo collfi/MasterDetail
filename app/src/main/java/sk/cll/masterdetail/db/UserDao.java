@@ -3,22 +3,21 @@ package sk.cll.masterdetail.db;
 import java.util.List;
 
 import androidx.lifecycle.LiveData;
-import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
-@Dao
+//@Dao
 public interface UserDao {
 
     @Insert
-    void insertAll(List<User> users);
+    void insertAll(List<KUser> users);
 
     @Query("SELECT * FROM users")
-    LiveData<List<User>> getAll();
+    LiveData<List<KUser>> getAll();
 
     @Delete
-    void delete(User user);
+    void delete(KUser user);
 
     @Query("DELETE FROM users")
     void deleteAll();

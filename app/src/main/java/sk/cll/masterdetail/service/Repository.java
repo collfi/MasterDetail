@@ -11,50 +11,50 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import sk.cll.masterdetail.db.User;
-import sk.cll.masterdetail.utils.Utils;
-import sk.cll.masterdetail.db.UserDao;
-import sk.cll.masterdetail.db.UserRoomDatabase;
+import sk.cll.masterdetail.db.KUser;
+import sk.cll.masterdetail.db.KUserDao;
+import sk.cll.masterdetail.db.KUserRoomDatabase;
+import sk.cll.masterdetail.utils.KUtils;
 
 public class Repository {
-    private UserService apiCallInterface;
-    private UserDao mUserDao;
-    private LiveData<List<User>> mAllUsers;
+    private KUserService apiCallInterface;
+    private KUserDao mUserDao;
+    private LiveData<List<KUser>> mAllUsers;
 
     public Repository(Application application) {
-        UserRoomDatabase db = UserRoomDatabase.getDatabase(application);
+        KUserRoomDatabase db = KUserRoomDatabase.Companion.getDatabase(application);
         this.apiCallInterface = new Retrofit.Builder()
-                .baseUrl(Utils.BASE_URL)
+                .baseUrl(KUtils.Companion.getBASE_URL())
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(new OkHttpClient.Builder().build())
-                .build().create(UserService.class);
+                .build().create(KUserService.class);
         mUserDao = db.mUserDao();
         mAllUsers = mUserDao.getAll();
     }
 
-    public Call<List<User>> executeApi() {
-        return apiCallInterface.getNewUsers(Utils.EXT, Utils.LIMIT);
+    public Call<List<KUser>> executeApi() {
+        return apiCallInterface.getNewUsers(KUtils.getEXT(), KUtils.getLIMIT());
     }
 
-    public LiveData<List<User>> getAllUsers() {
+    public LiveData<List<KUser>> getAllUsers() {
         return mAllUsers;
     }
 
-    public void insert(List<User> users) {
+    public void insert(List<KUser> users) {
         new InsertAsyncTask(mUserDao).execute(users);
     }
 
-    private static class InsertAsyncTask extends AsyncTask<List<User>, Void, Void> {
-        private UserDao mUserDao;
+    private static class InsertAsyncTask extends AsyncTask<List<KUser>, Void, Void> {
+        private KUserDao mUserDao;
 
-        InsertAsyncTask(UserDao userDao) {
+        InsertAsyncTask(KUserDao userDao) {
             mUserDao = userDao;
         }
 
         @Override
         @SafeVarargs
-        protected final Void doInBackground(List<User>... lists) {
+        protected final Void doInBackground(List<KUser>... lists) {
             mUserDao.insertAll(lists[0]);
             return null;
         }
